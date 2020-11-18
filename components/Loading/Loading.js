@@ -1,7 +1,7 @@
 import React from "react";
 import { View, StyleSheet } from 'react-native';
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faSpinner } from '@fortawesome/free-solid-svg-icons'
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 const Loading = () => {
     return (
@@ -20,6 +20,6 @@ const styles = StyleSheet.create({
     spinner: {
         transform: [{ rotateY: "180deg" }]
     }
-})
+});
 
 export default Loading;

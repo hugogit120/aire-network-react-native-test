@@ -1,9 +1,10 @@
 import React, { useEffect, useState, } from 'react';
 import { Text, View, StyleSheet, Image, Dimensions } from 'react-native';
-import { handleGetMovies, handlePlayerView } from '../../lib/api';
+import { handleGetMovies } from '../../lib/api';
 import { ScrollView, TouchableHighlight } from 'react-native-gesture-handler';
 import MovieCard from '../../components/MovieCard/MovieCard';
 import SearchBox from '../../components/SearchBox/SearchBox';
+import Loading from '../../components/Loading/Loading';
 
 let screenWidth = Dimensions.get("window").width;
 
@@ -12,27 +13,35 @@ const Main = ({ navigation }) => {
     const [theMovies, setTheMovies] = useState([]);
     const [searchField, setSearchField] = useState("");
     const [user, setTheUser] = useState({});
-    const [isFavoriteView, setIsFavoriteView] = useState(false);
-    const [toggleUserInfo, setToggleUserInfo] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [errorMessage, setErrorMessage] = useState("");
 
     const filteredMovies = theMovies.filter(movie => movie.title.toLocaleLowerCase().includes(searchField.toLocaleLowerCase()));
 
     useEffect(() => {
+        setIsLoading(true);
         handleGetMovies()
             .then(data => {
-                setTheMovies(data.contents)
-                setTheUser(data.user)
+                setTheMovies(data.contents);
+                setTheUser(data.user);
+                setIsLoading(false);
+            })
+            .catch(err => {
+                navigation.navigate("Error");
+                setIsLoading(false);
+
             })
     }, [])
+
+    if (isLoading) {
+        return <Loading />
+    }
 
     const onSearchChange = (event) => {
         setSearchField(event);
     };
 
     const onMovieClick = (id) => {
-        navigation.navigate("Player", { id })
+        navigation.navigate("Player", { id });
     }
 
     const addFavoriteHandler = (id) => {
@@ -52,8 +61,7 @@ const Main = ({ navigation }) => {
             horizontal={true}
             pagingEnabled={true}
         >
-            <ScrollView
-            >
+            <ScrollView>
                 <View style={styles.container}>
                     <SearchBox searchField={searchField} onSearchChange={onSearchChange} />
                     {
@@ -69,17 +77,14 @@ const Main = ({ navigation }) => {
 
             </ScrollView>
 
-            <View style={{
-                backgroundColor: "black",
-                flex: 1,
-                width: screenWidth,
-                alignItems: "center"
-            }} >
+            <View style={styles.user} >
                 <Image style={styles.avatar} source={{ uri: user.avatar }} />
                 <Text style={{ color: "white", marginTop: 50, fontSize: 50, fontWeight: "bold" }} >{user.name}</Text>
-                <Text style={{ color: "white", fontSize: 20, marginTop: 50 }}>NUMERO DE PELIS FAVORITAS: {user.favs.length}</Text>
+
+                {user && user.favs && <Text style={{ color: "white", fontSize: 20, marginTop: 50 }}>NUMERO DE PELIS FAVORITAS: {user.favs.length} </Text>}
+
             </View>
-        </ScrollView >
+        </ScrollView>
     )
 }
 
@@ -94,6 +99,12 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         width: screenWidth
     },
+    user: {
+        backgroundColor: "#223343",
+        flex: 1,
+        width: screenWidth,
+        alignItems: "center"
+    },
     results: {
         width: "100%"
     },
@@ -103,4 +114,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default Main
+export default Main;

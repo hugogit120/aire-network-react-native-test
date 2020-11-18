@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, TouchableOpacity, TextInput, Text, View, StyleSheet, Image, TouchableHighlight } from 'react-native';
+import { TextInput, View, StyleSheet, } from 'react-native';
 
 const SearchBox = ({ searchField, onSearchChange }) => {
 
@@ -24,6 +24,6 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         marginBottom: 40
     },
-})
+});
 
 export default SearchBox

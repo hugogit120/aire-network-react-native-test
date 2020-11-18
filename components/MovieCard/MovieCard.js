@@ -1,8 +1,7 @@
 import React from "react";
-import { Button, TouchableOpacity, TextInput, Text, View, StyleSheet, Image, TouchableHighlight } from 'react-native';
+import { TouchableOpacity, Text, View, StyleSheet, Image, TouchableHighlight } from 'react-native';
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faHeart as solidHeart, faClock } from '@fortawesome/free-solid-svg-icons'
-import { Link } from "@react-navigation/native";
 
 
 const secondsToTime = (secs) => {
@@ -14,11 +13,11 @@ const secondsToTime = (secs) => {
     let divisor_for_seconds = divisor_for_minutes % 60;
     let seconds = Math.ceil(divisor_for_seconds);
 
-    return (`${hours}h : ${minutes}m : ${seconds}s`)
+    return (`${hours}h : ${minutes}m : ${seconds}s`);
 }
 
-const MovieCard = ({ movie: { title, cover, duration, section, id }, onMovieClick, addFavorite, isFavorite }) => { //----> agregar props addFavorite, isFavorite  onClick={() => addFavorite(id)
-    // {isFavorite ? solidHeart : outlinedHeart}
+const MovieCard = ({ movie: { title, cover, duration, section, id }, onMovieClick, addFavorite, isFavorite }) => {
+
     return (
 
         <TouchableHighlight style={styles.moviesContainer}>
@@ -117,8 +116,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default MovieCard
-
-// <View className="w-20 pointer flex justify-center items-center"  >
-//                         <FontAwesomeIcon className="f2" color="red" icon={isFavorite ? solidHeart : outlinedHeart} />
-//                     </View>
+export default MovieCard;

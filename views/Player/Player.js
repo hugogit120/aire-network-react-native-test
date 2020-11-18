@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Video } from 'expo-av';
-import { Button, TouchableOpacity, TextInput, Text, View, StyleSheet, Image, TouchableHighlight } from 'react-native';
+import { Text, View, StyleSheet } from 'react-native';
 import Loading from '../../components/Loading/Loading';
 import { handlePlayerView } from '../../lib/api';
 
@@ -10,11 +10,15 @@ const Player = ({ route: { params: { id } } }) => {
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
-        setIsLoading(true)
+        setIsLoading(true);
         handlePlayerView(id)
             .then(data => {
-                setContent(data)
-                setIsLoading(false)
+                setContent(data);
+                setIsLoading(false);
+            })
+            .catch(() => {
+                navigation.navigate("Error");
+                setIsLoading(false);
             })
     }, [])
 
@@ -23,8 +27,8 @@ const Player = ({ route: { params: { id } } }) => {
     }
 
     return (
-        <View>
-            <Text>{content.title}</Text>
+        <View style={styles.videoPlayer}>
+            <Text style={styles.title}>{content.title}</Text>
             <Video
                 source={{ uri: content.url }}
                 shouldPlay
@@ -36,4 +40,18 @@ const Player = ({ route: { params: { id } } }) => {
     )
 }
 
-export default Player
+const styles = StyleSheet.create({
+    title: {
+        textAlign: "center",
+        color: "white",
+        padding: 50,
+        fontSize: 30,
+        fontWeight: "bold"
+    },
+    videoPlayer: {
+        backgroundColor: "#223343",
+        height: "100%"
+    }
+});
+
+export default Player;
